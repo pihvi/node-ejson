@@ -1,0 +1,11 @@
+{
+  "name": "node-ejson",
+  "description": "Node native decrypter for EJSON",
+  "version": "0.2.0",
+  "type": "module",
+  "main": "ejson.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test"
+  }
+}
