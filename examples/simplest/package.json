@@ -1,0 +1,13 @@
+{
+  "name": "node-ejson-simplest-example",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Example project using node-ejson",
+  "main": "index.js",
+  "dependencies": {
+    "node-ejson": "^0.2.0"
+  },
+  "scripts": {
+    "start": "node index.js"
+  }
+}
