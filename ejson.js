@@ -52,29 +52,38 @@ export const defaultConfig = {
 const mergeConfigs = (config) => ({...defaultConfig, ...config})
 
 const processObjectFields = (rawConf, privateKey) => {
-  for (const key in rawConf) {
+  const configJson = structuredClone(rawConf)
+  for (const key in configJson) {
     if (key.startsWith('_')) {
       const keyName = key.slice(1)
-      if (!rawConf[keyName]) {
-        rawConf[keyName] = rawConf[key]
+      if (!configJson[keyName]) {
+        configJson[keyName] = configJson[key]
       }
-    } else if (typeof rawConf[key] === 'string' && rawConf[key].startsWith('EJ[')) {
-      const parsed = parseEncryptedValue(rawConf[key])
-      rawConf[key] = decrypt(parsed.box, parsed.nonce, parsed.encrypterPublic, privateKey)
-    } else if (typeof rawConf[key] === 'object') {
-      processObjectFields(rawConf[key], privateKey)
+    } else if (typeof configJson[key] === 'string' && configJson[key].startsWith('EJ[')) {
+      const parsed = parseEncryptedValue(configJson[key])
+      configJson[key] = decrypt(parsed.box, parsed.nonce, parsed.encrypterPublic, privateKey)
+    } else if (typeof configJson[key] === 'object') {
+      processObjectFields(configJson[key], privateKey)
     }
+  }
+  return configJson
+}
+
+const getConfigJson = async (config) => {
+  if (config.configJson) {
+    return config.configJson
+  } else {
+    const filePath = conf.envFilePath ?? `${conf.envFileDir}/${conf.envFilePrefix}${conf.envFileSuffix}`
+    const envFile = await fs.readFile(filePath, 'utf8')
+    return JSON.parse(envFile)
   }
 }
 
 export const processEjson = async (config) => {
   const conf = mergeConfigs(config)
-  const filePath = conf.envFilePath ?? `${conf.envFileDir}/${conf.envFilePrefix}${conf.envFileSuffix}`
-  const envFile = await fs.readFile(filePath, 'utf8')
-  const rawConf = JSON.parse(envFile)
+  const rawConf = await getConfigJson(config)
   const privateKey = await conf.getPrivateKey(rawConf['_public_key'], conf)
-  processObjectFields(rawConf, privateKey)
-  return rawConf
+  return processObjectFields(rawConf, privateKey)
 }
 
 export default processEjson

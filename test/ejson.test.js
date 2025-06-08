@@ -1,7 +1,15 @@
 import {after, before, test} from 'node:test'
 import assert from 'node:assert/strict'
-import {decrypt, defaultConfig, encrypt, parseEncryptedValue} from '../ejson.js'
+import {decrypt, defaultConfig, encrypt, parseEncryptedValue, processEjson} from '../ejson.js'
 import testEjson from './test.json' with {type: 'json'}
+
+test('given secrets json and key', async (t) => {
+  const result = await processEjson({
+    configJson: await testEjson,
+    getPrivateKey: (publicKey) => keys[publicKey]
+  })
+  assert.equal(result.test_secret, testSecretValue)
+})
 
 test('default config', (t) => {
   assert.equal(defaultConfig.envFileDir, '.')
