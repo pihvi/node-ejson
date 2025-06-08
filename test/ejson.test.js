@@ -1,7 +1,20 @@
 import {after, before, test} from 'node:test'
 import assert from 'node:assert/strict'
-import {decrypt, defaultConfig, encrypt, parseEncryptedValue} from '../ejson.js'
-import testEjson from './test.json' with {type: 'json'}
+import {decrypt, defaultConfig, encrypt, parseEncryptedValue, processEjson} from '../ejson.js'
+
+const testEjsonContentString = `{
+    "_public_key": "af33e849c33dd190ba01b2d50c898190f8da09082fbf1a244e4af9d62479d932",
+    "test_secret": "EJ[1:jeDOl5qTBwflgRuusXrqoT5eclnznLKuCp8fxbuHjGg=:fRVLp8YU/m9sb04HKAN9r8RVzLNWkdTu:uhoMKBnFTUDSO5nayF/Wx/D+d8dPBIlLUJq8KA==]"
+}`
+const testEjson = JSON.parse(testEjsonContentString)
+
+const keys = {
+  af33e849c33dd190ba01b2d50c898190f8da09082fbf1a244e4af9d62479d932:
+    'ddbd617e7826292966fe1b8686b32e2214fa3e8633881ae6a31edf6175b790a2'
+}
+const testSecretValue = 'Hello World!'
+const parsed = parseEncryptedValue(testEjson.test_secret)
+const testEjsonContent = testEjsonContentString
 
 test('default config', (t) => {
   assert.equal(defaultConfig.envFileDir, '.')
@@ -27,12 +40,13 @@ test('decrypt', (t) => {
   assert.deepEqual(box, testSecretValue)
 })
 
-const keys = {
-  af33e849c33dd190ba01b2d50c898190f8da09082fbf1a244e4af9d62479d932:
-    'ddbd617e7826292966fe1b8686b32e2214fa3e8633881ae6a31edf6175b790a2'
-}
-const testSecretValue = 'Hello World!'
-const parsed = parseEncryptedValue(testEjson.test_secret)
+test('processEjson', async (t) => {
+  const config = {
+    getPrivateKey: async (publicKey) => keys[publicKey]
+  }
+  const processedConfig = await processEjson(testEjsonContent, config)
+  assert.deepEqual(processedConfig.test_secret, testSecretValue)
+})
 
 let originalEnv
 before(() => {
