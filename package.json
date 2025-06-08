@@ -1,7 +1,7 @@
 {
   "name": "node-ejson",
   "description": "Node native decrypter for EJSON",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "type": "module",
   "main": "ejson.js",
   "license": "MIT",

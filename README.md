@@ -69,6 +69,11 @@ npm test
 
 MIT
 
+## Releases
+
+0.3.0 2025-06-08
+- Allow passing parsed JSON. No need for file system read and works in more cloud environments.
+
 ## TODO
 
 - Include common configs
