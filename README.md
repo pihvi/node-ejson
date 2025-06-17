@@ -71,6 +71,9 @@ MIT
 
 ## Releases
 
+0.3.1 2025-06-17
+- Fix config reading bug.
+
 0.3.0 2025-06-08
 - Allow passing parsed JSON. No need for file system read and works in more cloud environments.
 

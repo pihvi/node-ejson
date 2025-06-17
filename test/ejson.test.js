@@ -3,6 +3,25 @@ import assert from 'node:assert/strict'
 import {decrypt, defaultConfig, encrypt, parseEncryptedValue, processEjson} from '../ejson.js'
 import testEjson from './test.json' with {type: 'json'}
 
+test('process with default config', async (t) => {
+  try {
+    await processEjson()
+    assert.fail('should fail')
+  } catch (e) {
+    assert.equal(e.message, `ENOENT: no such file or directory, open './env.ejson'`)
+  }
+})
+
+test('given conf to read file', async (t) => {
+  const result = await processEjson({
+    envFileDir: 'test',
+    envFilePrefix: 'test',
+    envFileSuffix: '.json',
+    getPrivateKey: (publicKey) => keys[publicKey],
+  })
+  assert.equal(result.test_secret, testSecretValue)
+})
+
 test('given secrets json and key', async (t) => {
   const result = await processEjson({
     configJson: await testEjson,

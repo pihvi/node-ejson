@@ -73,7 +73,7 @@ const getConfigJson = async (config) => {
   if (config.configJson) {
     return config.configJson
   } else {
-    const filePath = conf.envFilePath ?? `${conf.envFileDir}/${conf.envFilePrefix}${conf.envFileSuffix}`
+    const filePath = config.envFilePath ?? `${config.envFileDir}/${config.envFilePrefix}${config.envFileSuffix}`
     const envFile = await fs.readFile(filePath, 'utf8')
     return JSON.parse(envFile)
   }
@@ -81,7 +81,7 @@ const getConfigJson = async (config) => {
 
 export const processEjson = async (config) => {
   const conf = mergeConfigs(config)
-  const rawConf = await getConfigJson(config)
+  const rawConf = await getConfigJson(conf)
   const privateKey = await conf.getPrivateKey(rawConf['_public_key'], conf)
   return processObjectFields(rawConf, privateKey)
 }
