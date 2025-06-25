@@ -30,6 +30,14 @@ test('given secrets json and key', async (t) => {
   assert.equal(result.test_secret, testSecretValue)
 })
 
+test('duplicates unencrypted keys without underscore', async (t) => {
+  const result = await processEjson({
+    configJson: await testEjson,
+    getPrivateKey: (publicKey) => keys[publicKey]
+  })
+  assert.equal(result.test_unencrypted, 'boom')
+})
+
 test('default config', (t) => {
   assert.equal(defaultConfig.envFileDir, '.')
 })
