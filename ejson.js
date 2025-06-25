@@ -63,7 +63,7 @@ const processObjectFields = (rawConf, privateKey) => {
       const parsed = parseEncryptedValue(configJson[key])
       configJson[key] = decrypt(parsed.box, parsed.nonce, parsed.encrypterPublic, privateKey)
     } else if (typeof configJson[key] === 'object') {
-      processObjectFields(configJson[key], privateKey)
+      configJson[key] = processObjectFields(configJson[key], privateKey)
     }
   }
   return configJson

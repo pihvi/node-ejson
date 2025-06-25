@@ -35,7 +35,18 @@ test('duplicates unencrypted keys without underscore', async (t) => {
     configJson: await testEjson,
     getPrivateKey: (publicKey) => keys[publicKey]
   })
+  assert.equal(result._test_unencrypted, 'boom')
   assert.equal(result.test_unencrypted, 'boom')
+})
+
+test('for nested config, works as non nested', async (t) => {
+  const result = await processEjson({
+    configJson: await testEjson,
+    getPrivateKey: (publicKey) => keys[publicKey]
+  })
+  assert.equal(result.nested.test_secret, testSecretValue)
+  assert.equal(result.nested._test_unencrypted, 'nested boom')
+  assert.equal(result.nested.test_unencrypted, 'nested boom')
 })
 
 test('default config', (t) => {

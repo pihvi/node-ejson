@@ -1,5 +1,9 @@
 {
   "_public_key": "af33e849c33dd190ba01b2d50c898190f8da09082fbf1a244e4af9d62479d932",
   "test_secret": "EJ[1:jeDOl5qTBwflgRuusXrqoT5eclnznLKuCp8fxbuHjGg=:fRVLp8YU/m9sb04HKAN9r8RVzLNWkdTu:uhoMKBnFTUDSO5nayF/Wx/D+d8dPBIlLUJq8KA==]",
-  "_test_unencrypted": "boom"
+  "_test_unencrypted": "boom",
+  "nested": {
+    "test_secret": "EJ[1:jeDOl5qTBwflgRuusXrqoT5eclnznLKuCp8fxbuHjGg=:fRVLp8YU/m9sb04HKAN9r8RVzLNWkdTu:uhoMKBnFTUDSO5nayF/Wx/D+d8dPBIlLUJq8KA==]",
+    "_test_unencrypted": "nested boom"
+  }
 }

@@ -71,6 +71,9 @@ MIT
 
 ## Releases
 
+0.3.2 2025-06-25
+- Fix nested configs.
+
 0.3.1 2025-06-17
 - Fix config reading bug.
 
